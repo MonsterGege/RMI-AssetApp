@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class Server extends UnicastRemoteObject implements InterfaceAset{
     public static void main(String[] args) throws RemoteException {
       Registry reg = LocateRegistry.createRegistry(212);
       Server s = new Server();
-      reg.rebind("db", s);
-        System.out.println("Server is Running....");
+      reg.rebind("rmi", s);
+       System.out.println("Server is Running....");
     }
 
 
@@ -65,9 +66,8 @@ public class Server extends UnicastRemoteObject implements InterfaceAset{
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_aset","root","");
-            Statement st = (Statement) con.createStatement();
-            String sql = "SELECT * FROM tb_aset";
-            ResultSet rs =  st.executeQuery(sql);
+            PreparedStatement ps=con.prepareStatement("select * from tb_aset");  
+            ResultSet rs=ps.executeQuery();  
             while(rs.next()){
                 Aset aset = new Aset();
                 aset.setKode_aset(rs.getString(1));

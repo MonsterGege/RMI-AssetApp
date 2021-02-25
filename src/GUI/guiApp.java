@@ -11,6 +11,8 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -32,10 +34,7 @@ public class guiApp extends javax.swing.JFrame {
         initComponents();
         try {
             tampildata();
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Error ClassNotFound");
-            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotBoundException ex) {
+        }catch (NotBoundException ex) {
             System.out.println("Error Bound");
             Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
@@ -44,39 +43,25 @@ public class guiApp extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             System.out.println("ErrorRemote");
             Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            System.out.println("ErrorDB");
-            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
-    public void tampildata() throws ClassNotFoundException, NotBoundException, MalformedURLException, RemoteException, SQLException{
-        try{
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mysql//localhost:3306/db_aset","root", "");
-        InterfaceAset ia = (InterfaceAset) Naming.lookup("rmi://localhost:212/db");   
-        DefaultTableModel model = new DefaultTableModel();
+    public void tampildata() throws NotBoundException, MalformedURLException, RemoteException{
+    
+        InterfaceAset ia = (InterfaceAset) Naming.lookup("rmi://localhost:212/rmi");   
+        DefaultTableModel model = (DefaultTableModel) tabelAset.getModel();
+        Object[] row = new Object [8];
         for(Aset aset: ia.getAset()){
-            String kolom1 = aset.getKode_aset();
-            String kolom2 = aset.getNama_aset();
-            String kolom3 = aset.getKategori_aset();
-            Date kolom4 = aset.getTanggal_terima();
-            String kolom5 = aset.getBataspemakaian();
-            String kolom6 = aset.getMasapemakaian();
-            int kolom7 = aset.getNilaiaset();
-            int kolom8 = aset.getPenyusutan();
-            model.addColumn(kolom1);
-            model.addColumn(kolom2);
-            model.addColumn(kolom3);
-            model.addColumn(kolom4);
-            model.addColumn(kolom5);
-            model.addColumn(kolom6);
-            model.addColumn(kolom7);
-            model.addColumn(kolom8);
-        }
-        tabelAset.setModel(model);
-        }catch(ClassNotFoundException | MalformedURLException | NotBoundException | RemoteException | SQLException ex){
-        }
+            row[0] = aset.getKode_aset();
+            row[1] = aset.getNama_aset();
+            row[2] = aset.getKategori_aset();
+            row[3] = aset.getTanggal_terima();
+            row[4] = aset.getBataspemakaian();
+            row[5] = aset.getMasapemakaian();
+            row[6] = aset.getNilaiaset();
+            row[7] = aset.getPenyusutan();
+            model.addRow(row);
         
+    }
     }
 
     /**
