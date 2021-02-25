@@ -68,7 +68,20 @@ public class Server extends UnicastRemoteObject implements InterfaceAset{
 
     @Override
     public String Delete(String kode) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+           try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_aset","root","");
+            Statement del = (Statement) con.createStatement();
+            String sql = "delete from tb_aset where kode_aset='"+kode+"'";
+            del.executeUpdate(sql);
+            return "OK";
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); 
+        return "OK";
     }
 
     @Override

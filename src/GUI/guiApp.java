@@ -19,13 +19,17 @@ import java.rmi.registry.Registry;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -40,11 +44,13 @@ public class guiApp extends javax.swing.JFrame {
         initComponents();
         try {
             tampildata();
-            
+         
             comboKategori.setModel(new DefaultComboBoxModel<>(new String[]{
-                "Pilih Kategori", "Furniture", "Alat Tulis Kantor", "Alat Makan", "Transport","Lain-lain"
+                "Furniture", "Alat Tulis Kantor", "Alat Makan", "Transport","Tanah & Bangunan","Logam Mulia","Lain-lain"
             }));
             
+            comboKategori.setSelectedIndex(-1);
+                       
         }catch (NotBoundException ex) {
             System.out.println("Error Bound");
             Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,7 +96,6 @@ public class guiApp extends javax.swing.JFrame {
         btnTambah2 = new javax.swing.JButton();
         panel = new javax.swing.JPanel();
         txtKodeBarang = new javax.swing.JTextField();
-        btnCari = new javax.swing.JButton();
         labelKodeBarang = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelAset = new javax.swing.JTable();
@@ -115,15 +120,20 @@ public class guiApp extends javax.swing.JFrame {
         labelPenyusutan = new javax.swing.JLabel();
         editPenyusutan = new javax.swing.JTextField();
         comboKategori = new javax.swing.JComboBox<>();
+        btnReset = new javax.swing.JButton();
         labelJudul = new javax.swing.JLabel();
 
         btnTambah2.setText("Tambah");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnCari.setText("Cari");
+        txtKodeBarang.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtKodeBarangKeyPressed(evt);
+            }
+        });
 
-        labelKodeBarang.setText("Kode Aset");
+        labelKodeBarang.setText("Cari Aset");
 
         tabelAset.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -161,6 +171,16 @@ public class guiApp extends javax.swing.JFrame {
         });
 
         btnHapus.setText("Hapus");
+        btnHapus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHapusMouseClicked(evt);
+            }
+        });
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         labelKodeAset.setText("Kode Aset");
 
@@ -192,6 +212,18 @@ public class guiApp extends javax.swing.JFrame {
             }
         });
 
+        btnReset.setText("Reset");
+        btnReset.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnResetMouseClicked(evt);
+            }
+        });
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
@@ -204,10 +236,8 @@ public class guiApp extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(labelKodeBarang)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtKodeBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtKodeBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,9 +249,11 @@ public class guiApp extends javax.swing.JFrame {
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(editKodeAset, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -261,11 +293,9 @@ public class guiApp extends javax.swing.JFrame {
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(labelKodeBarang)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtKodeBarang, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtKodeBarang, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                    .addComponent(labelKodeBarang))
                 .addGap(28, 28, 28)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -274,7 +304,8 @@ public class guiApp extends javax.swing.JFrame {
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(41, 41, 41)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelLayout.createSequentialGroup()
@@ -385,10 +416,7 @@ public class guiApp extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
         }
-                       
-            
-        
-        
+ 
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void editKodeAsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editKodeAsetActionPerformed
@@ -446,6 +474,45 @@ public class guiApp extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
+    private void txtKodeBarangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKodeBarangKeyPressed
+        DefaultTableModel modelCari = (DefaultTableModel) tabelAset.getModel();
+        TableRowSorter<DefaultTableModel> rowSortCari = new TableRowSorter<>(modelCari);
+        tabelAset.setRowSorter(rowSortCari);
+        rowSortCari.setRowFilter(RowFilter.regexFilter("(?i)"+txtKodeBarang.getText().trim())); //"(?i)" for case insensitive
+        
+    }//GEN-LAST:event_txtKodeBarangKeyPressed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    private void btnResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMouseClicked
+        clearInput();
+    }//GEN-LAST:event_btnResetMouseClicked
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnHapusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHapusMouseClicked
+        try {
+            InterfaceAset ya = (InterfaceAset) Naming.lookup("rmi://localhost:212/rmi");
+            String kode = editKodeAset.getText();
+            String delete = ya.Delete(kode);
+            DefaultTableModel defTable = (DefaultTableModel) tabelAset.getModel();
+            defTable.setRowCount(0);
+            tampildata();
+            JOptionPane.showMessageDialog(null,delete,"Aset",JOptionPane.INFORMATION_MESSAGE);
+            clearInput();
+        } catch (NotBoundException ex) {
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnHapusMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -483,9 +550,9 @@ public class guiApp extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelBatasPemakai;
-    private javax.swing.JButton btnCari;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton btnTambah;
     private javax.swing.JButton btnTambah2;
     private javax.swing.JComboBox<String> comboKategori;

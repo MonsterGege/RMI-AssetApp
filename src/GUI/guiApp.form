@@ -66,10 +66,8 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Component id="labelKodeBarang" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtKodeBarang" min="-2" pref="199" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnCari" min="-2" pref="74" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="txtKodeBarang" min="-2" pref="359" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -84,9 +82,11 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="btnHapus" min="-2" pref="120" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnEdit" min="-2" pref="120" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="btnReset" min="-2" pref="93" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -143,12 +143,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="labelKodeBarang" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnCari" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="txtKodeBarang" alignment="1" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txtKodeBarang" alignment="3" pref="43" max="32767" attributes="0"/>
+                      <Component id="labelKodeBarang" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="223" max="-2" attributes="0"/>
@@ -159,6 +156,7 @@
                       <Component id="btnTambah" alignment="2" min="-2" pref="40" max="-2" attributes="0"/>
                       <Component id="btnHapus" alignment="2" min="-2" pref="40" max="-2" attributes="0"/>
                       <Component id="btnEdit" alignment="2" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="btnReset" alignment="2" min="-2" pref="40" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
@@ -203,15 +201,13 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JTextField" name="txtKodeBarang">
-        </Component>
-        <Component class="javax.swing.JButton" name="btnCari">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Cari"/>
-          </Properties>
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtKodeBarangKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="labelKodeBarang">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Kode Aset"/>
+            <Property name="text" type="java.lang.String" value="Cari Aset"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -314,6 +310,10 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Hapus"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnHapusMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHapusActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="labelKodeAset">
           <Properties>
@@ -392,6 +392,15 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnReset">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Reset"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnResetMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnResetActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
