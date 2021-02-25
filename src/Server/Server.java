@@ -46,8 +46,24 @@ public class Server extends UnicastRemoteObject implements InterfaceAset{
     }
 
     @Override
-    public String Insert(String kode, String nama, String kategori, Date tanggalterima, String bataspemakaian, String masapemakaian, int nilaiaset, int penyusutan) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String Insert(String kode,String nama, String kategori,Date tanggalterima, String bataspemakaian, String masapemakaian,int nilaiaset, int penyusutan) throws RemoteException {
+        
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_aset","root","");
+            Statement insertP = (Statement) con.createStatement();
+            String queryInsert = "insert into tb_aset values('"+kode+"','"+nama+"','"+kategori+"','"+tanggalterima+"','"+bataspemakaian+"','"+masapemakaian+"','"+nilaiaset+"','"+penyusutan+"')";
+            
+            insertP.executeUpdate(queryInsert);
+            
+                       
+        }catch(ClassNotFoundException e){
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, e);
+        }catch (SQLException es){
+            return es.toString();
+        }
+        return "Aset ditambahkan";
     }
 
     @Override
@@ -57,7 +73,20 @@ public class Server extends UnicastRemoteObject implements InterfaceAset{
 
     @Override
     public String Update(String kode, String nama, String kategori, Date tanggalterima, String bataspemakaian, String masapemakaian, int nilaiaset, int penyusutan) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_aset","root","");
+            Statement updt = (Statement) con.createStatement();
+            String sql = "update tb_aset set nama_aset='"+nama+"',kategori_aset='"+kategori+"',tanggal_terima='"+tanggalterima+"',bataspemakaian='"+bataspemakaian+"',masapemakaian='"+masapemakaian+"',nilaiaset='"+nilaiaset+"',penyusutan='"+penyusutan+"' where kode_aset='"+kode+"'";
+            updt.executeUpdate(sql);
+            
+            return "BERHASIL";
+        }catch(Exception e){
+            return (e.toString());
+            
+        }
+        
     }
 
     @Override
@@ -79,11 +108,14 @@ public class Server extends UnicastRemoteObject implements InterfaceAset{
                 aset.setNilaiaset(rs.getInt(7));
                 aset.setPenyusutan(rs.getInt(8));
                 listaset.add(aset);
+                
             }
+            
         } catch  (SQLException | ClassNotFoundException e) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, e);
             
         }
+        
         return listaset;
     }
 

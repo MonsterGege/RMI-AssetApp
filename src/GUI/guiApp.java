@@ -7,6 +7,9 @@ package gui;
 
 import Interface.InterfaceAset;
 import Server.Aset;
+import Server.Server;
+import com.mysql.jdbc.Statement;
+import java.awt.HeadlessException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -19,6 +22,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,6 +40,11 @@ public class guiApp extends javax.swing.JFrame {
         initComponents();
         try {
             tampildata();
+            
+            comboKategori.setModel(new DefaultComboBoxModel<>(new String[]{
+                "Pilih Kategori", "Furniture", "Alat Tulis Kantor", "Alat Makan", "Transport","Lain-lain"
+            }));
+            
         }catch (NotBoundException ex) {
             System.out.println("Error Bound");
             Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -49,6 +60,7 @@ public class guiApp extends javax.swing.JFrame {
     
         InterfaceAset ia = (InterfaceAset) Naming.lookup("rmi://localhost:212/rmi");   
         DefaultTableModel model = (DefaultTableModel) tabelAset.getModel();
+                
         Object[] row = new Object [8];
         for(Aset aset: ia.getAset()){
             row[0] = aset.getKode_aset();
@@ -63,6 +75,8 @@ public class guiApp extends javax.swing.JFrame {
         
     }
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -88,7 +102,6 @@ public class guiApp extends javax.swing.JFrame {
         editNamaAset = new javax.swing.JTextField();
         labelNamaAset = new javax.swing.JLabel();
         labelKategori = new javax.swing.JLabel();
-        comboKategori = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         editTanggalTerima = new javax.swing.JTextField();
         LabelBatasPemakai = new javax.swing.JLabel();
@@ -101,6 +114,7 @@ public class guiApp extends javax.swing.JFrame {
         editNilaiAset = new javax.swing.JTextField();
         labelPenyusutan = new javax.swing.JLabel();
         editPenyusutan = new javax.swing.JTextField();
+        comboKategori = new javax.swing.JComboBox<>();
         labelJudul = new javax.swing.JLabel();
 
         btnTambah2.setText("Tambah");
@@ -116,10 +130,21 @@ public class guiApp extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Kode Aset", "Nama Aset", "Kategori Aset", "Tanggal Terima", "Batas Pemakaian", "Masa Pemakaian", "Nilai Aset", "Penyusutan"
+                "Kode Aset", "Nama Aset", "Kategori Aset", "Tanggal Terima", "Batas Pemakaian", "Masa Pemakaian (bln)", "Nilai Aset", "Penyusutan"
             }
         ));
+        tabelAset.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelAsetMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelAset);
+
+        editKodeAset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editKodeAsetActionPerformed(evt);
+            }
+        });
 
         btnTambah.setText("Tambah");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
@@ -129,6 +154,11 @@ public class guiApp extends javax.swing.JFrame {
         });
 
         btnEdit.setText("Edit");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("Hapus");
 
@@ -137,8 +167,6 @@ public class guiApp extends javax.swing.JFrame {
         labelNamaAset.setText("Nama Aset");
 
         labelKategori.setText("Kategori");
-
-        comboKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         LabelBatasPemakai.setText("Batas Pemakaian");
 
@@ -152,6 +180,18 @@ public class guiApp extends javax.swing.JFrame {
 
         labelPenyusutan.setText("Penyusutan");
 
+        comboKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboKategori.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboKategoriItemStateChanged(evt);
+            }
+        });
+        comboKategori.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboKategoriActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
@@ -162,8 +202,7 @@ public class guiApp extends javax.swing.JFrame {
                     .addComponent(jSeparator1)
                     .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(labelKodeBarang)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtKodeBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -172,27 +211,23 @@ public class guiApp extends javax.swing.JFrame {
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                                    .addComponent(labelKodeAset, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(4, 4, 4))
-                                .addGroup(panelLayout.createSequentialGroup()
-                                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(labelKategori)
-                                        .addComponent(labelNamaAset, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                            .addGroup(panelLayout.createSequentialGroup()
-                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7)))
+                                .addComponent(labelKategori)
+                                .addComponent(labelNamaAset, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labelKodeAset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8, 8, 8)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLayout.createSequentialGroup()
+                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(editKodeAset, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(editNamaAset)
-                                    .addComponent(comboKategori, 0, 200, Short.MAX_VALUE))
-                                .addGap(83, 83, 83)
+                                    .addComponent(editNamaAset, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(comboKategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(81, 81, 81)
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(panelLayout.createSequentialGroup()
@@ -229,53 +264,46 @@ public class guiApp extends javax.swing.JFrame {
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(labelKodeBarang)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtKodeBarang, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(28, 28, 28)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(41, 41, 41)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelLayout.createSequentialGroup()
-                            .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(editKodeAset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(labelKodeAset))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(editNamaAset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(labelNamaAset))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(comboKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(labelKategori)))
-                        .addGroup(panelLayout.createSequentialGroup()
-                            .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(editNilaiAset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(labelNilaiAset))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(editPenyusutan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(labelPenyusutan))))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(editNilaiAset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelNilaiAset))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(editPenyusutan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelPenyusutan)))
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(editTanggalTerima, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelTanggalTerima))
+                            .addComponent(labelTanggalTerima)
+                            .addComponent(editKodeAset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelKodeAset))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(editBatasPemakai, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(LabelBatasPemakai))
+                            .addComponent(LabelBatasPemakai)
+                            .addComponent(editNamaAset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelNamaAset))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(editMasaPemakai, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelMasaPemakai)
-                            .addComponent(labelBulan)))))
+                            .addComponent(labelBulan)
+                            .addComponent(labelKategori)
+                            .addComponent(comboKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
 
         labelJudul.setFont(new java.awt.Font("Tahoma", 0, 28)); // NOI18N
@@ -290,7 +318,7 @@ public class guiApp extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelJudul))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,15 +327,124 @@ public class guiApp extends javax.swing.JFrame {
                 .addComponent(labelJudul)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void clearInput(){
+        editKodeAset.setText(null);
+        editNamaAset.setText(null);
+        comboKategori.setSelectedIndex(0);
+        editTanggalTerima.setText(null);
+        editBatasPemakai.setText(null);
+        editMasaPemakai.setText(null);
+        editNilaiAset.setText(null);
+        editPenyusutan.setText(null);
+    }
+    
+    public void insertData() throws SQLException{
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_aset","root","");
+            Statement insertStatement = (Statement) con.createStatement();
+            
+            String inKode = editKodeAset.getText();
+            String inNamaAs = editNamaAset.getText();
+            String inKategori = comboKategori.getSelectedItem().toString();
+            Date inTglTerima = Date.valueOf(editTanggalTerima.getText());
+            String inBatas = editBatasPemakai.getText();
+            String inMasa = editMasaPemakai.getText();
+            int inNilaiAs = Integer.parseInt(editNilaiAset.getText());
+            int inPenyusutan = Integer.parseInt(editPenyusutan.getText());
+            
+            InterfaceAset ia = (InterfaceAset) Naming.lookup("rmi://localhost:212/rmi");
+            String insertResult = ia.Insert(inKode, inNamaAs, inKategori, inTglTerima, inBatas, inMasa, inNilaiAs, inPenyusutan);
+            
+            DefaultTableModel defTable = (DefaultTableModel) tabelAset.getModel();
+            defTable.setRowCount(0);
+            tampildata();
+            
+            JOptionPane.showMessageDialog(null, insertResult,"Aset ditambahkan", JOptionPane.INFORMATION_MESSAGE);
+            clearInput();         
+            
+        }catch(HeadlessException | ClassNotFoundException | NumberFormatException | MalformedURLException | NotBoundException | RemoteException | SQLException e){
+            JOptionPane.showMessageDialog(null, e,"Error", JOptionPane.ERROR_MESSAGE);
+            
+        }
+    
+    }
+    
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        // TODO add your handling code here:
+        
+       
+        try {
+            insertData();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                       
+            
+        
+        
     }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void editKodeAsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editKodeAsetActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editKodeAsetActionPerformed
+
+    private void comboKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboKategoriActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboKategoriActionPerformed
+
+    private void comboKategoriItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboKategoriItemStateChanged
+        //String comboKat = 
+    }//GEN-LAST:event_comboKategoriItemStateChanged
+
+    private void tabelAsetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelAsetMouseClicked
+        int ambil = tabelAset.getSelectedRow();
+         DefaultTableModel model = (DefaultTableModel) tabelAset.getModel();
+         editKodeAset.setText(model.getValueAt(ambil,0).toString());
+         editNamaAset.setText(model.getValueAt(ambil,1).toString());
+         editMasaPemakai.setText(model.getValueAt(ambil,5).toString());
+         editNilaiAset.setText(model.getValueAt(ambil,6).toString());
+         editPenyusutan.setText(model.getValueAt(ambil,7).toString());
+         editBatasPemakai.setText(model.getValueAt(ambil,4).toString());
+         editTanggalTerima.setText(model.getValueAt(ambil,3).toString());
+         comboKategori.setSelectedItem(model.getValueAt(ambil,2).toString());
+    }//GEN-LAST:event_tabelAsetMouseClicked
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        try {   
+            
+            InterfaceAset ya = (InterfaceAset) Naming.lookup("rmi://localhost:212/rmi");
+            String kode = editKodeAset.getText();
+            String nama = editNamaAset.getText();
+            String masa = editMasaPemakai.getText();
+            int nilai = Integer.parseInt(editNilaiAset.getText());
+            int penyusutan = Integer.parseInt(editPenyusutan.getText());
+            String batas = editBatasPemakai.getText();
+            Date tanggal = Date.valueOf(editTanggalTerima.getText());
+            String kategori = comboKategori.getSelectedItem().toString();
+            
+            String update = ya.Update(kode, nama, kategori, tanggal, batas, masa, nilai, penyusutan);
+            
+            DefaultTableModel defTable = (DefaultTableModel) tabelAset.getModel();
+            defTable.setRowCount(0);
+            tampildata();
+            JOptionPane.showMessageDialog(null,update,"Aset",JOptionPane.INFORMATION_MESSAGE);
+            clearInput();
+            
+        } catch (NotBoundException ex) {
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
 
     /**
      * @param args the command line arguments

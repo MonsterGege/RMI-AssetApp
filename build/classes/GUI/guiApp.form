@@ -36,7 +36,7 @@
                   <Component id="panel" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="labelJudul" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="29" max="32767" attributes="0"/>
+              <EmptySpace pref="27" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -47,7 +47,7 @@
               <Component id="labelJudul" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="67" max="32767" attributes="0"/>
+              <EmptySpace pref="72" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -64,8 +64,7 @@
                       <Component id="jSeparator1" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="btnTambah" min="-2" pref="120" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Component id="labelKodeBarang" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="txtKodeBarang" min="-2" pref="199" max="-2" attributes="0"/>
@@ -74,36 +73,28 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="labelKodeAset" min="-2" pref="123" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="labelKategori" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="labelNamaAset" alignment="0" min="-2" pref="121" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                  </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelKategori" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelNamaAset" alignment="0" min="-2" pref="121" max="-2" attributes="0"/>
+                                  <Component id="labelKodeAset" alignment="1" min="-2" pref="123" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="btnHapus" min="-2" pref="120" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="btnTambah" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
+                                  <Component id="btnHapus" min="-2" pref="120" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="btnEdit" min="-2" pref="120" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="editKodeAset" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
-                                      <Component id="editNamaAset" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="comboKategori" alignment="0" pref="200" max="32767" attributes="0"/>
+                                      <Component id="editKodeAset" min="-2" pref="120" max="-2" attributes="0"/>
+                                      <Component id="editNamaAset" pref="200" max="32767" attributes="0"/>
+                                      <Component id="comboKategori" alignment="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="103" alignment="0" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
@@ -156,7 +147,6 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="labelKodeBarang" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnCari" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                          <Component id="btnTambah" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                       </Group>
                       <Component id="txtKodeBarang" alignment="1" max="32767" attributes="0"/>
                   </Group>
@@ -165,56 +155,45 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jSeparator1" min="-2" pref="8" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnEdit" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="btnHapus" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="btnTambah" alignment="2" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="btnHapus" alignment="2" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="btnEdit" alignment="2" min="-2" pref="40" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="editKodeAset" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                                  <Component id="labelKodeAset" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="editNamaAset" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                                  <Component id="labelNamaAset" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="comboKategori" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                                  <Component id="labelKategori" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="editNilaiAset" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="labelNilaiAset" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="editNilaiAset" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                                  <Component id="labelNilaiAset" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="editPenyusutan" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                                  <Component id="labelPenyusutan" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="editPenyusutan" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="labelPenyusutan" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="editTanggalTerima" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="labelTanggalTerima" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="editKodeAset" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="labelKodeAset" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="editBatasPemakai" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="LabelBatasPemakai" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="editNamaAset" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="labelNamaAset" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="editMasaPemakai" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="labelMasaPemakai" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelBulan" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelKategori" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="comboKategori" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -251,7 +230,7 @@
                     <Column editable="true" title="Kategori Aset" type="java.lang.Object"/>
                     <Column editable="true" title="Tanggal Terima" type="java.lang.Object"/>
                     <Column editable="true" title="Batas Pemakaian" type="java.lang.Object"/>
-                    <Column editable="true" title="Masa Pemakaian" type="java.lang.Object"/>
+                    <Column editable="true" title="Masa Pemakaian (bln)" type="java.lang.Object"/>
                     <Column editable="true" title="Nilai Aset" type="java.lang.Object"/>
                     <Column editable="true" title="Penyusutan" type="java.lang.Object"/>
                   </Table>
@@ -304,10 +283,16 @@
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabelAsetMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.JTextField" name="editKodeAset">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editKodeAsetActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnTambah">
           <Properties>
@@ -321,6 +306,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnHapus">
           <Properties>
@@ -343,21 +331,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Kategori"/>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JComboBox" name="comboKategori">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-          </AuxValues>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator1">
         </Component>
@@ -400,6 +373,25 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="editPenyusutan">
+        </Component>
+        <Component class="javax.swing.JComboBox" name="comboKategori">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="comboKategoriItemStateChanged"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboKategoriActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
