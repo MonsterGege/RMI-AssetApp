@@ -3,46 +3,47 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Server;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  *
  * @author Eberhend
  */
-public class Aset {
-    String kode;
-    String nama;
-    String kategori;
-    Date tanggal_terima;
-    String bataspemakaian;
-    String masapemakaian;
-    int nilaiaset;
-    int penyusutan;
+public class Aset implements Serializable {
+    private String kode_aset;
+    private String nama_aset;
+    private String kategori_aset;
+    private Date tanggal_terima;
+    private String bataspemakaian;
+    private String masapemakaian;
+    private int nilaiaset;
+    private int penyusutan;
 
-    public String getKode() {
-        return kode;
+    public String getKode_aset() {
+        return kode_aset;
     }
 
-    public void setKode(String kode) {
-        this.kode = kode;
+    public void setKode_aset(String kode_aset) {
+        this.kode_aset = kode_aset;
     }
 
-    public String getNama() {
-        return nama;
+    public String getNama_aset() {
+        return nama_aset;
     }
 
-    public void setNama(String nama) {
-        this.nama = nama;
+    public void setNama_aset(String nama_aset) {
+        this.nama_aset = nama_aset;
     }
 
-    public String getKategori() {
-        return kategori;
+    public String getKategori_aset() {
+        return kategori_aset;
     }
 
-    public void setKategori(String kategori) {
-        this.kategori = kategori;
+    public void setKategori_aset(String kategori_aset) {
+        this.kategori_aset = kategori_aset;
     }
 
     public Date getTanggal_terima() {

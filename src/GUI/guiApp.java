@@ -5,6 +5,20 @@
  */
 package gui;
 
+import Interface.InterfaceAset;
+import Server.Aset;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author dyota
@@ -16,6 +30,53 @@ public class guiApp extends javax.swing.JFrame {
      */
     public guiApp() {
         initComponents();
+        try {
+            tampildata();
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error ClassNotFound");
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            System.out.println("Error Bound");
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            System.out.println("Error URL");
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            System.out.println("ErrorRemote");
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            System.out.println("ErrorDB");
+            Logger.getLogger(guiApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void tampildata() throws ClassNotFoundException, NotBoundException, MalformedURLException, RemoteException, SQLException{
+        try{
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con = DriverManager.getConnection("jdbc:mysql//localhost:3306/db_aset","root", "");
+        InterfaceAset ia = (InterfaceAset) Naming.lookup("rmi://localhost:212/db");   
+        DefaultTableModel model = new DefaultTableModel();
+        for(Aset aset: ia.getAset()){
+            String kolom1 = aset.getKode_aset();
+            String kolom2 = aset.getNama_aset();
+            String kolom3 = aset.getKategori_aset();
+            Date kolom4 = aset.getTanggal_terima();
+            String kolom5 = aset.getBataspemakaian();
+            String kolom6 = aset.getMasapemakaian();
+            int kolom7 = aset.getNilaiaset();
+            int kolom8 = aset.getPenyusutan();
+            model.addColumn(kolom1);
+            model.addColumn(kolom2);
+            model.addColumn(kolom3);
+            model.addColumn(kolom4);
+            model.addColumn(kolom5);
+            model.addColumn(kolom6);
+            model.addColumn(kolom7);
+            model.addColumn(kolom8);
+        }
+        tabelAset.setModel(model);
+        }catch(ClassNotFoundException | MalformedURLException | NotBoundException | RemoteException | SQLException ex){
+        }
+        
     }
 
     /**
@@ -67,13 +128,7 @@ public class guiApp extends javax.swing.JFrame {
 
         tabelAset.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Kode Aset", "Nama Aset", "Kategori Aset", "Tanggal Terima", "Batas Pemakaian", "Masa Pemakaian", "Nilai Aset", "Penyusutan"
@@ -82,6 +137,11 @@ public class guiApp extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tabelAset);
 
         btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         btnEdit.setText("Edit");
 
@@ -259,6 +319,10 @@ public class guiApp extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTambahActionPerformed
 
     /**
      * @param args the command line arguments
