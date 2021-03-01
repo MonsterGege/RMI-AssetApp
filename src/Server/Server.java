@@ -74,14 +74,14 @@ public class Server extends UnicastRemoteObject implements InterfaceAset{
             Statement del = (Statement) con.createStatement();
             String sql = "delete from tb_aset where kode_aset='"+kode+"'";
             del.executeUpdate(sql);
-            return "OK";
+            return "Data terhapus";
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
         //throw new UnsupportedOperationException("Not supported yet."); 
-        return "OK";
+        return "Data terhapus";
     }
 
     @Override
@@ -93,8 +93,7 @@ public class Server extends UnicastRemoteObject implements InterfaceAset{
             Statement updt = (Statement) con.createStatement();
             String sql = "update tb_aset set nama_aset='"+nama+"',kategori_aset='"+kategori+"',tanggal_terima='"+tanggalterima+"',bataspemakaian='"+bataspemakaian+"',masapemakaian='"+masapemakaian+"',nilaiaset='"+nilaiaset+"',penyusutan='"+penyusutan+"' where kode_aset='"+kode+"'";
             updt.executeUpdate(sql);
-            
-            return "BERHASIL";
+            return "Data ter-edit";
         }catch(Exception e){
             return (e.toString());
             
