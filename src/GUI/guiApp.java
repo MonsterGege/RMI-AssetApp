@@ -7,27 +7,18 @@ package gui;
 
 import Interface.InterfaceAset;
 import Server.Aset;
-import Server.Server;
-import com.mysql.jdbc.Statement;
 import java.awt.HeadlessException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -402,9 +393,6 @@ public class guiApp extends javax.swing.JFrame {
     
     public void insertData() throws SQLException{
         try{
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_aset","root","");
-            Statement insertStatement = (Statement) con.createStatement();
             
             String inKode = editKodeAset.getText();
             String inNamaAs = editNamaAset.getText();
@@ -425,7 +413,7 @@ public class guiApp extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, insertResult,"Aset ditambahkan", JOptionPane.INFORMATION_MESSAGE);
             clearInput();         
             
-        }catch(HeadlessException | ClassNotFoundException | NumberFormatException | MalformedURLException | NotBoundException | RemoteException | SQLException e){
+        }catch(HeadlessException | NumberFormatException | MalformedURLException | NotBoundException | RemoteException e){
             JOptionPane.showMessageDialog(null, e,"Error", JOptionPane.ERROR_MESSAGE);
             
         }
